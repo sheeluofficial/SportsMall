@@ -3,20 +3,38 @@ const dotevt = require("dotenv")
 const connectDatabase = require("./src/config/database.js")
 // Config 
 
+// uncaught Exceptions
+
+process.on("uncaughtException",(err)=>{
+    console.log(`Error ${err.message}`)
+    console.log("Shutting down the server due to uncaught Exceptions")
+    process.exit(1)
+    // server.close(()=>{
+    //     process.exit(1)
+    // })
+    
+})
+
 dotevt.config({path:"./src/config/config.env"})
+
+  // Database connection 
+    
+  connectDatabase()
 
 // Running server
 
-app.listen(process.env.PORT,async ()=>{
+ const server = app.listen(process.env.PORT, ()=>{
 
-    // Database connection 
+        console.log("server is running on",process.env.PORT)  
+})
 
-    try{
-        await connectDatabase()
-        console.log("server is running on",process.env.PORT)
-    }
-    catch{
-        console.log("Error connecting database")
-    }
+// Unhandled Promise Rejections
+
+process.on("unhandledRejection",(err)=>{
+    console.log(`Error ${err.message}`)
+    console.log("Shutting down the server due to unhandled Promise Rejection")
+    server.close(()=>{
+        process.exit(1)
+    })
     
 })

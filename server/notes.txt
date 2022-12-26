@@ -1,0 +1,8 @@
+Error handling 
+
+  1.  Basic Error Handling with Express middleWare 
+  2.  Async Error Handling with Promise.resolve
+  3.  mongodb CastError 
+  4.  unhandled Promise Error
+  5.  Uncaught Exceptions
+  

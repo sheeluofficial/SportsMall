@@ -9,6 +9,8 @@ const  product = require("./src/routes/product.route.js")
 
 app.use("/api/v1",product)
 
+// Middleware for error handling
+
 app.use(errorHandlerMid)
 
 module.exports = app
