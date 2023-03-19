@@ -1,12 +1,14 @@
 const  catchAsyncError = require("../middlewares/catchAsyncErrors");
+const ErrorHandler = require("../utils/errorhandler");
 const Product = require("../models/product.model");
 const ApiFeatures = require("../utils/apifeatures");
-const ErrorHandler = require("../utils/errorhandler");
 
 
 // Create new product -- Admin
 
 exports.createProduct = catchAsyncError(async (req,res,next)=>{
+
+    req.body.user = req.user.id;
 
     const product = await Product.create(req.body);
 
