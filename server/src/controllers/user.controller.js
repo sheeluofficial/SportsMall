@@ -4,6 +4,8 @@ const User = require("../models/user.model")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
+
+
 exports.registerUser = catchAsyncError(async (req,res,next)=>{
     const {name, email, password} = req.body;
 
