@@ -2,27 +2,101 @@ const ErrorHandler = require("../utils/errorhandler");
 const catchAsyncError = require("./catchAsyncErrors");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user.model");
-exports.isAuthenticatedUser = catchAsyncError(async(req,res,next)=>{
-    const {token } = req.cookies
+const crypto = require("crypto");
+const sendEmail = require("../utils/sendEmail");
+const bcrypt = require("bcryptjs")
+// Authenticate function
+exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
+  const { token } = req.cookies;
 
-    if(!token) {
-        return next(new ErrorHandler("Please login to access this resource",401));
+  if (!token) {
+    return next(new ErrorHandler("Please login to access this resource", 401));
+  }
+
+  const decodedData = jwt.verify(token, process.env.JWT_SECRET);
+
+  req.user = await User.findById(decodedData.id);
+
+  next();
+});
+
+// Role authorization function
+exports.authorizeRoles = (...roles) => {
+  return (req, res, next) => {
+    if (!roles.includes(req.user.role)) {
+      return next(
+        new ErrorHandler(
+          `Role: ${req.user.role} is not allowed to access this resource`,
+          403
+        )
+      );
     }
 
-    const decodedData = jwt.verify(token,process.env.JWT_SECRET)
+    next();
+  };
+};
 
-    req.user =  await User.findById(decodedData.id)
+// Generate a password reset token and send an email
 
+exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
+    const { email } = req.body;
+  
+    try {
+      const user = await User.findOne({ email });
+  
+      if (!user) {
+        return next(new ErrorHandler("Email does not exist in our database", 404));
+      }
+  
+      // Create a random token
+      const resetToken = crypto.randomBytes(20).toString("hex");
+  
+      // Storing token and Expire time in DB
+      user.resetPasswordToken = resetToken;
+      user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes in milliseconds
+  
+      // Save the token to the user's document in the database
+      await user.save();
 
-    next()
-})
+  console.log(user)
 
-exports.authorizeRoles = (...roles)=>{
-    return (req,res,next)=>{
-        if(!roles.includes(req.user.role)){
-            return next(new ErrorHandler(`Role: ${req.user.role} is not allowed to access this resource`,403))
-        }
+      const RESET_PASSWORD_URL = `${req.protocol}://${req.get("host")}/api/v1/password/reset/${resetToken}`;
+      const message = `Your password reset token is : \n \n ${RESET_PASSWORD_URL} \n \n If you have not requested for password reset, Then please ignore this email`;
+  
+   await sendEmail({email,message,res, next})
 
-        next();
+    } catch (error) {
+      console.error(error);
+      return next(new ErrorHandler("Internal server error", 500));
     }
-}
+  });
+  
+
+// Reset password using token
+exports.resetPassword = catchAsyncError(async (req, res,next) => {
+    const { token, newPassword } = req.body;
+  
+   
+      const user = await User.findOne({ resetPasswordToken: token });
+  
+      if (!user) {
+        return next(new ErrorHandler("User not found", 404));
+      }
+  
+      // Update the user's password and clear the reset token
+      
+      if(user.resetPasswordExpire >= Date.now()) {
+        const hashedPassword = await bcrypt.hash(newPassword,8);
+        user.password = hashedPassword;
+        user.resetToken = null;
+        await user.save();
+        res.status(200).json({ message: 'Password reset successful' });
+      } else {
+        user.resetToken = null;
+        await user.save();
+        res.status(401).json({ message: 'Token expired' });
+      }
+      
+  
+     
+    });

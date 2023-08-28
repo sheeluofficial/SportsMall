@@ -1,5 +1,5 @@
 const app = require("./app.js")
-const dotevt = require("dotenv")
+const dotenv = require("dotenv")
 const connectDatabase = require("./src/config/database.js")
 // Config 
 
@@ -15,7 +15,7 @@ process.on("uncaughtException",(err)=>{
     
 })
 
-dotevt.config({path:"./src/config/config.env"})
+dotenv.config({path:"./src/config/config.env"})
 
   // Database connection 
     
