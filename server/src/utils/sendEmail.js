@@ -36,7 +36,7 @@ const sendEmail = async ({ email, message,res, next }) => {  // Added 'res' para
   try {
     await transporter.sendMail(mailOptions);
     console.log('Reset email sent successfully');
-    res.status(200).json({ message: 'Reset email sent successfully' });
+   return res.status(200).json({ message: 'Reset email sent successfully' });
   } catch (error) {
     console.error(error);
     return next(new ErrorHandler('Failed to send reset email', 500));
