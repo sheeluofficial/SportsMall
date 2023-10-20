@@ -10,9 +10,11 @@ app.use(cookieParser())
 // route imports 
 const  product = require("./src/routes/product.routes.js")
 const user = require("./src/routes/user.routes")
+const order = require("./src/routes/order.routes.js");
 
-app.use("/api/v1",product)
-app.use("/api/v1",user)
+app.use("/api/v1",product);
+app.use("/api/v1",user);
+app.use("/api/v1",order);
 
 
 // Middleware for error handling
