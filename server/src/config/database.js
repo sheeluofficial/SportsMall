@@ -8,4 +8,4 @@ const connectDatabase = ()=> mongoose.connect(
       console.log(`Mongodb connected with server: ${data.connection.host}`)
     })
 
-    module.exports = connectDatabase
+    module.exports = connectDatabase;

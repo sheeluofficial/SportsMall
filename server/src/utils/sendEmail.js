@@ -14,16 +14,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-console.log({
-  service: process.env.SMTP_SERVICE,
-  host: process.env.SMTP_HOST,
-  port: 587,
-  secure: false,
-  auth: {
-    user: process.env.SMTP_MAIL,
-    pass: process.env.SMTP_PASSWORD,
-  }
-})
+
 // Send reset email
 const sendEmail = async ({ email, message,res, next }) => {  // Added 'res' parameter
   const mailOptions = {
