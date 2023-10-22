@@ -20,9 +20,11 @@ dotenv.config({path:"./src/config/config.env"});
   connectDatabase()
 
 // Running server
- const server = app.listen(process.env.PORT, ()=>{
-console.log("server is running on",process.env.PORT)  
-})
+const server = app.listen(process.env.PORT, () => {
+    const serverUrl = `http://localhost:${process.env.PORT}`;
+    console.log("Server is running on", serverUrl);
+  });
+  
 
 // Unhandled Promise Rejections
 
