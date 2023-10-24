@@ -1,15 +1,25 @@
-const express = require("express")
-const errorHandlerMid = require("./src/middlewares/errorHandler.middleware.js")
-const validator = require("validator")
-const cookieParser = require("cookie-parser")
+const express = require("express");
+const errorHandlerMid = require("./src/middlewares/errorHandler.middleware.js");
+
+
+const cookieParser = require("cookie-parser");
+const bodyParser = require("body-parser");
+const fileUpload = require("express-fileupload"); // used for image and other files
+const path = require("path");
+const cors = require("cors");
+
 const app = express();
 
-app.use(express.json())
-app.use(cookieParser())
+app.use(express.json());
+app.use(cookieParser());
+app.use(bodyParser.json({ limit: "50mb" }));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(fileUpload());
+app.use(cors());
 
 // route imports 
-const  product = require("./src/routes/product.routes.js")
-const user = require("./src/routes/user.routes")
+const  product = require("./src/routes/product.routes.js");
+const user = require("./src/routes/user.routes");
 const order = require("./src/routes/order.routes.js");
 
 app.get("/",(req,res)=>{

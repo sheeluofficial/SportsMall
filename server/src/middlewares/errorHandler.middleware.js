@@ -1,4 +1,4 @@
-const ErrorHandler = require("../utils/errorhandler");
+const ErrorHandler = require("../utils/errorHandler");
 
 const errorHandlerMid = (err, req, res, next) => {
   err.message = err.message || "Internal server Error";

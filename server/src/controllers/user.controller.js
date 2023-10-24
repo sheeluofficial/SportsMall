@@ -1,5 +1,5 @@
 const catchAsyncError = require("../middlewares/catchAsyncErrors");
-const ErrorHandler = require("../utils/errorhandler");
+const ErrorHandler = require("../utils/errorHandler");
 const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -8,11 +8,13 @@ const sendToken = require("../utils/jwtToken");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
+// Note: To be updated
+
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
 
   const hashedPassword = await bcrypt.hash(password, 8);
-  
+
   const user = await User.create({
     name,
     email,
@@ -70,34 +72,53 @@ exports.logout = catchAsyncError(async (req, res, next) => {
 exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
   const { email } = req.body;
 
-  try {
-    const user = await User.findOne({ email });
+  const user = await User.findOne({ email });
 
-    if (!user) {
-      return next(
-        new ErrorHandler("Email does not exist in our database", 404)
-      );
-    }
+  if (!user) {
+    return next(new ErrorHandler("Email does not exist in our database", 404));
+  }
 
-    // Create a random token
-    const resetToken = crypto.randomBytes(20).toString("hex");
+  // Create a random token
+  const resetToken = crypto.randomBytes(20).toString("hex");
 
-    // Storing token and Expire time in DB
-    user.resetPasswordToken = resetToken;
-    user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes in milliseconds
+  // Storing token and Expire time in DB
+  user.resetPasswordToken = resetToken;
+  user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes in milliseconds
 
-    // Save the token to the user's document in the database
-    await user.save();
+  // Save the token to the user's document in the database
+  await user.save();
 
-    console.log(user);
+  let resetPasswordUrl = "";
 
-    const RESET_PASSWORD_URL = `${req.protocol}://${req.get(
+  const isLocal = req.hostname === "localhost" || req.hostname === "127.0.0.1";
+  if (isLocal) {
+    resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+  } else {
+    resetPasswordUrl = `${req.protocol}://${req.get(
       "host"
-    )}/api/v1/password/reset/${resetToken}`;
-    const message = `Your password reset token is : \n \n ${RESET_PASSWORD_URL} \n \n If you have not requested for password reset, Then please ignore this email`;
+    )}/password/reset/${resetToken}`;
+  }
 
-    await sendEmail({ email, message, res, next });
+  console.log(user);
+
+  //   const RESET_PASSWORD_URL = `${req.protocol}://${req.get(
+  //     "host"
+  //   )}/api/v1/password/reset/${resetToken}`;
+
+  const message = `Your password reset token is : \n \n ${resetPasswordUrl} \n \n If you have not requested for password reset, Then please ignore this email`;
+
+  try {
+    await sendEmail({ email, message, subject: `Ecommerce Password Recovery` });
+
+    res.status(200).json({
+      success: true,
+      message: `Email sent to ${user.email} successfully`,
+    });
   } catch (error) {
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+
+    await user.save({ validateBeforeSave: false });
     console.error(error);
     return next(new ErrorHandler("Internal server error", 500));
   }
@@ -133,7 +154,8 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
   user.resetPasswordExpire = undefined;
   await user.save();
 
-  return res.status(200).json({ message: "Password reset successful" });
+ return sendToken(user, 200, res);
+  // return res.status(200).json({ message: "Password reset successful" });
 });
 
 // Get User Details
@@ -141,7 +163,10 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 exports.getUserDetails = catchAsyncError(async (req, res, next) => {
   const user = await User.findById(req.user.id);
 
-  res.status(200).json({ success: true, user });
+  res.status(200).json({
+    success: true,
+    user,
+  });
 });
 
 // Update user password
@@ -170,107 +195,104 @@ exports.updatePassword = catchAsyncError(async (req, res, next) => {
 
   await user.save();
 
-  res
-    .status(200)
-    .json({ success: true, message: "Password updated successfully" });
+  sendToken(user, 200, res);
+  //   res
+  //     .status(200)
+  //     .json({ success: true, message: "Password updated successfully" });
 });
 
 // Update user profile Route
+// Note : Update it
 
-exports.updateProfile= catchAsyncError(async (req, res, next) => {
-   
-   const newUserData  = {
+exports.updateProfile = catchAsyncError(async (req, res, next) => {
+  const newUserData = {
     name: req.body.name,
-    email:req.body.email
-   }
+    email: req.body.email,
+  };
 
-// Add clowdanary 
-   const user =  await User.findByIdAndUpdate(req.user.id, newUserData,{
-    new:true,
+  // Add clowdanary
+  const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
+    new: true,
     runValidators: true,
-    useFindAndModify:false
-   })
-  
-    res
-      .status(200)
-      .json({ success: true, message: "Profile updated successfully" });
+    useFindAndModify: false,
   });
 
+  res
+    .status(200)
+    .json({ success: true, message: "Profile updated successfully" });
+});
 
-  // Get all users --Admin
-  
-exports.getAllUsers= catchAsyncError(async (req, res, next) => {
-   
-   const users = await User.find();
-  
-    res
-      .status(200)
-      .json({ success: true,users, message: "Users details fetched successfully" });
+// Get all users --Admin
+
+exports.getAllUsers = catchAsyncError(async (req, res, next) => {
+  const users = await User.find();
+
+  res.status(200).json({
+    success: true,
+    users,
+    message: "Users details fetched successfully",
+  });
+});
+
+// Get single users --Admin
+
+exports.getSingleUser = catchAsyncError(async (req, res, next) => {
+  const user = await User.findById(req.params.id);
+
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not exist with ID : ${req.params.id}`, 404)
+    );
+  }
+
+  res.status(200).json({
+    success: true,
+    user,
+    message: "User details fetched successfully",
+  });
+});
+
+// Update user profile --Admin
+// Note : Update it add clowdanary
+exports.updateUserRole = catchAsyncError(async (req, res, next) => {
+  const newUserData = {
+    name: req.body.name,
+    email: req.body.email,
+    role: req.body.role,
+  };
+
+  // Add clowdanary
+
+  let user = User.findById(req.params.id);
+
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not exist with ID : ${req.params.id}`)
+    );
+  }
+
+  user = await User.findByIdAndUpdate(req.params.id, newUserData, {
+    new: true,
+    runValidators: true,
+    useFindAndModify: false,
   });
 
+  res.status(200).json({ success: true, message: "User updated successfully" });
+});
 
-  // Get single users --Admin
+// Delete user profile --Admin
 
-exports.getSingleUser= catchAsyncError(async (req, res, next) => {
-   
-   const user = await User.findById(req.params.id);
+// Note : Update it with cloud remove image.
+exports.deleteUser = catchAsyncError(async (req, res, next) => {
+  const user = User.findById(req.params.id);
 
-   if(!user) {
-    return next(new ErrorHandler(`User does not exist with ID : ${req.params.id}`,404 ))
-   }
-  
-    res
-      .status(200)
-      .json({ success: true,user, message: "User details fetched successfully" });
-  });
+  if (!user) {
+    return next(
+      new ErrorHandler(`User does not exist with ID : ${req.params.id}`)
+    );
+  }
 
+  await User.findByIdAndDelete(req.params.id);
 
-  // Update user profile --Admin 
-
-  exports.updateUserRole = catchAsyncError(async (req, res, next) => {
-   
-    const newUserData  = {
-     name: req.body.name,
-     email:req.body.email,
-     role : req.body.role
-    }
- 
- // Add clowdanary 
-
- let user = User.findById(req.params.id);
-
- if(!user) {
-     return next(new ErrorHandler(`User does not exist with ID : ${req.params.id}`));
- }
-
-     user =  await User.findByIdAndUpdate(req.params.id, newUserData,{
-     new:true,
-     runValidators: true,
-     useFindAndModify:false
-    })
-   
-     res
-       .status(200)
-       .json({ success: true, message: "User updated successfully" });
-   });
-
-
-
-
-    // Delete user profile --Admin 
-
-  exports.deleteUser = catchAsyncError(async (req, res, next) => {
-   
-
-    const user = User.findById(req.params.id);
-
-    if(!user) {
-        return next(new ErrorHandler(`User does not exist with ID : ${req.params.id}`));
-    }
-
-   await User.findByIdAndDelete(req.params.id)
-   
-     res
-       .status(200)
-       .json({ success: true, message: "User Deleted successfully" });
-   });
+  res.status(200).json({ success: true, message: "User Deleted successfully" });
+});

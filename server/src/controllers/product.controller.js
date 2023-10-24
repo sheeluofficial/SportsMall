@@ -1,10 +1,10 @@
 const catchAsyncError = require("../middlewares/catchAsyncErrors");
-const ErrorHandler = require("../utils/errorhandler");
+const ErrorHandler = require("../utils/errorHandler");
 const Product = require("../models/product.model");
-const ApiFeatures = require("../utils/apifeatures");
+const ApiFeatures = require("../utils/apiFeatures");
 
 // Create new product -- Admin
-
+//  Note : update it add cloudnary 
 exports.createProduct = catchAsyncError(async (req, res, next) => {
   req.body.user = req.user.id;
 
@@ -73,31 +73,41 @@ exports.getProductDetails = catchAsyncError(async (req, res, next) => {
 // get All product
 exports.getAllProducts = async (req, res, next) => {
   const resultPerPage = 5;
-  const productCount = await Product.countDocuments();
+
+  // next(new ErrorHandler("internal error",500));
+
+  const productsCount = await Product.countDocuments();
   const ApiFeature = new ApiFeatures(Product.find(), req.query)
     .search()
     .filter()
     .pagination(resultPerPage);
+    
   const products = await ApiFeature.query;
+  let filteredProductCount = products.length;
 
   res.status(200).json({
     message: "Data fetched",
     products,
-    productCount,
+    productsCount,
+    resultPerPage,
+    filteredProductCount
   });
+
   // res.status(200).send({message:"All product"})
 };
 
 // Create new review and update the review
 
 exports.createProductReview = catchAsyncError(async (req, res, next) => {
-  const { rating, comment, productId } = req.body;
-
+  const { ratings, comment, productId, title, recommend } = req.body;
   const review = {
-    user: req.user._id,
+    userId: req.user._id,
     name: req.user.name,
-    rating: Number(rating),
+    ratings: Number(ratings),
+    title: title,
     comment: comment,
+    recommend: recommend,
+    avatar: req.user.avatar.url, // Add user avatar URL to the review object
   };
 
   const product = await Product.findById(productId);
@@ -107,15 +117,21 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   );
 
   if (isRevieved) {
+    // Update the existing review
     product.reviews.forEach((rev) => {
-      if (rev.user.toString() === req.user._id.toString()) {
-        rev.rating = rating;
+      if (rev.userId.toString() === req.user._id.toString()) {
+        rev.ratings = ratings;
         rev.comment = comment;
+        rev.recommend = recommend;
+        
+        rev.title = title;
+        product.numOfReviews = product.reviews.length;
       }
     });
   } else {
+    // Add a new review
     product.reviews.push(review);
-    product.numOfReviews = product.numOfReviews + 1;
+    product.numOfReviews = product.reviews.length;
   }
 
   let totalRatings = 0;
@@ -148,6 +164,8 @@ exports.getProductReviews = catchAsyncError(async (req, res, next) => {
   });
 });
 
+
+
 exports.deleteReview = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(req.query.productId);
 
@@ -167,14 +185,11 @@ exports.deleteReview = catchAsyncError(async (req, res, next) => {
 
   let ratings = 0;
   if (!reviews.length === 0) {
-    let ratings = totalRatings / reviews.length;
+    ratings = totalRatings / reviews.length;
   }
 
   const numOfReviews = reviews.length;
 
-  console.log(reviews, numOfReviews, ratings);
-
-  console.log("ids", req.query.productId, req.query.id);
 
   await Product.findByIdAndUpdate(
     req.query.productId,
@@ -192,6 +207,5 @@ exports.deleteReview = catchAsyncError(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    reviews: reviews,
   });
 });
