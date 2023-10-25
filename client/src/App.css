@@ -1,12 +1,17 @@
-* {
-  margin: 0;
-  scroll-behavior: smooth;
+html,
+body,
+#root {
+  height: 100%;
+  width: 100%;
 }
 
-body {
-  cursor: url("./images/cursor.png"), auto;
-}
+body{
+  background-color: #f1f1f1;
+  margin: 0px;
+  padding: 0px;
 
+  font-family: 'Archivo', sans-serif;;
+}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -15,13 +20,15 @@ input::-webkit-inner-spin-button {
 }
 
 /* Firefox */
-input[type="number"] {
+
+/* input[type="number"] {
+  
   -moz-appearance: textfield;
-}
+} */
 
 .greenColor {
-  color: green !important;
+  color: green !important; 
 }
-.redColor {
+.redColor { 
   color: red !important;
 }

@@ -16,9 +16,20 @@ exports.isAuthenticatedUser = catchAsyncError(async (req, res, next) => {
 
   const decodedData = jwt.verify(token, process.env.JWT_SECRET);
 
-  req.user = await User.findById(decodedData.id);
+  const tokenExpirationTime = decodedData.exp * 1000; // Convert seconds to milliseconds
+  const currentTime = Date.now();
+  const tokenMaxAge = process.env.COOKIE_EXPIRE * 24 * 60 * 60 * 1000; // Convert days to milliseconds
+  
+  if (tokenExpirationTime > currentTime && (tokenExpirationTime - currentTime) < tokenMaxAge) {
+      // Token is not expired within the allowed max age
+      req.user = await User.findById(decodedData.id);
+      next();
+  } else {
+      return next(new ErrorHandler("Token is expired or invalid, please login again", 401));
+  }
 
-  next();
+
+  
 });
 
 // Role authorization function
