@@ -60,7 +60,7 @@ export const getProduct = (
     } catch (error) {
       dispatch({
         type: ALL_PRODUCT_FAIL,
-        payload: error.message,
+        payload: error.response.data.message,
       });
     }
   };
@@ -84,7 +84,7 @@ export const getProductDetails = (id) => {
     } catch (error) {
       dispatch({
         type: PRODUCT_DETAILS_FAIL,
-        payload: error.message,
+        payload: error.response.data.message,
       });
     }
   };
@@ -101,7 +101,7 @@ export const newReview = (reviewData) => async (dispatch) => {
 
     dispatch({ type: NEW_REVIEW_SUCCESS, payload: data.success });
   } catch (error) {
-    dispatch({ type: NEW_REVIEW_FAIL, payload: error.message });
+    dispatch({ type: NEW_REVIEW_FAIL, payload: error.response.data.message });
   }
 };
 
@@ -114,7 +114,7 @@ export const getAdminProducts = () => async (dispatch) => {
 
     dispatch({ type: ADMIN_PRODUCT_SUCCESS, payload: data.products });
   } catch (error) {
-    dispatch({ type: ADMIN_PRODUCT_FAIL, payload: error.message });
+    dispatch({ type: ADMIN_PRODUCT_FAIL, payload: error.response.data.message });
   }
 };
 
@@ -143,7 +143,7 @@ export function createProduct(productData) {
     } catch (error) {
       dispatch({
         type: NEW_PRODUCT_FAIL,
-        payload: error.message,
+        payload: error.response.data.message,
       });
     }
   };
@@ -160,7 +160,7 @@ export function deleteProduct(id) {
     
       dispatch({ type: DELETE_PRODUCT_SUCCESS, payload: data.success });
     } catch (error) {
-      dispatch({ type: DELETE_PRODUCT_FAIL, payload: error.message });
+      dispatch({ type: DELETE_PRODUCT_FAIL, payload: error.response.data.message });
     }
   };
 }
@@ -187,7 +187,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
          } catch (error) {
            dispatch({
              type: UPDATE_PRODUCT_FAIL,
-             payload: error.message,
+             payload: error.response.data.message,
            });
          }
        };
@@ -201,7 +201,7 @@ export const updateProduct = (id, productData) => async (dispatch) => {
         const { data } = await axios.get(`/api/v1/reviews?id=${productId}`);
         dispatch({type : ALL_REVIEW_SUCCESS , payload : data.reviews})
      } catch (error) {
-        dispatch({type : ALL_REVIEW_FAIL , payload : error.message})
+        dispatch({type : ALL_REVIEW_FAIL , payload : error.response.data.message})
      }
  }
 
@@ -217,7 +217,7 @@ export const deleteProductReview = (reviewId , productId) => async (dispatch) =>
 
      dispatch({ type: DELETE_REVIEW_SUCCESS, payload: data.success });
    } catch (error) {
-      dispatch({type : DELETE_REVIEW_FAIL , payload : error.message})
+      dispatch({type : DELETE_REVIEW_FAIL , payload : error.response.data.message})
    }
 
 }
