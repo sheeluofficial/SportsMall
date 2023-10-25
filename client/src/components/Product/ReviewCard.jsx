@@ -22,7 +22,7 @@ const ReviewCard = ({ product }) => {
     setSortValue(event.target.value);
   };
 
-
+console.log(product,"inside review");
   // const sortedData = yourData.sort((a, b) => {
   //   switch (sortValue) {
   //     case "highest":

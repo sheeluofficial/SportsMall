@@ -159,7 +159,7 @@ Our company is dedicated to delivering superior sports equipment and accessories
           <Typography variant="body1" className={classes.infoText_about}>
             Since our inception in 2019, we have built a strong customer base
             and expanded our product range to cater to the diverse needs of
-            players at every level. We take pride in offering genuine cricket
+            players at every level. We take pride in offering genuine Sports
             products that are carefully curated and tested for quality and
             performance. Our team of experts works closely with manufacturers to
             ensure that our customers receive top-notch products.
@@ -178,11 +178,11 @@ Our company is dedicated to delivering superior sports equipment and accessories
           </Typography>
           <Typography variant="body1" className={classes.infoText_about}>
            
-Our mission at CricketWeapon is to deliver superior cricket equipment and accessories at affordable prices, making the sport accessible to players across the globe while nurturing their passion for the game. We are committed to offering an extensive selection of cricket gear, ranging from bats and balls to protective equipment and accessories, all meticulously designed to meet the highest standards of quality and performance.
+Our mission at SportsMall is to deliver superior Sports equipment and accessories at affordable prices, making the sport accessible to players across the globe while nurturing their passion for the game. We are committed to offering an extensive selection of Sports gear, ranging from bats and balls to protective equipment and accessories, all meticulously designed to meet the highest standards of quality and performance.
           </Typography>
           <Typography variant="body1" className={classes.infoText_about}>
             We are committed to continuously innovating and improving our
-            product range to meet the evolving needs of cricketers. Our team of
+            product range to meet the evolving needs of Sporters. Our team of
             experts works closely with manufacturers and conducts rigorous
             quality testing to ensure that every product we offer delivers
             exceptional performance on the field. We believe that every player

@@ -17,7 +17,7 @@ const TermsAndConditionsPage = () => {
       <div className="terms-content">
         <p>
           Thank you for shopping with SportsMall! We appreciate your business
-          and your interest in our cricket equipment. We want to make sure you
+          and your interest in our Sports equipment. We want to make sure you
           have a good experience purchasing from our website.
         </p>
         <p>

@@ -149,7 +149,7 @@ const MyCard = ({ review }) => {
       </div>
       <div>
         <Rating
-          value={4}
+          value={review.ratings}
           precision={0.5}
           size="midium"
           readOnly

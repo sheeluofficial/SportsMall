@@ -87,32 +87,32 @@ const useStyles = makeStyles((theme) => ({
 
 const slides = [
   {
-    image: require("../../Image/Cricket-wepon/img2.png"),
+    image: require("../../Image/Sports-Mall/img2.png"),
     quote:
-      "Unleash Your Passion for Cricket and Embrace the Thrill of the Game",
+      "Unleash Your Passion for Sports and Embrace the Thrill of the Game",
     saleText:
-      "Get in the game with up to 50% off on a wide range of cricket gear's",
+      "Get in the game with up to 50% off on a wide range of Sports gear's",
     productText: "Shop Now",
   },
   {
-    image: require("../../Image/Cricket-wepon/03.jpg"),
+    image: require("../../Image/Sports-Mall/03.jpg"),
     quote:
-      "Experience the Unparalleled Excitement and Achieve Victory with Our Premium Cricket Equipment",
+      "Experience the Unparalleled Excitement and Achieve Victory with Our Premium Sports Equipment",
     saleText:
       "Limited Time Offer: Don't miss out on the opportunity to upgrade your game",
     productText: "Buy Now",
   },
   {
-    image: require("../../Image/Cricket-wepon/01.jpg"),
+    image: require("../../Image/Sports-Mall/01.jpg"),
     quote:
       "Gear up with the Latest Innovations and Dominate the Field like Never Before",
     saleText: "Discover New Arrivals and stay ahead of the competition",
     productText: "Explore",
   },
   {
-    image: require("../../Image/Cricket-wepon/04.jpg"),
+    image: require("../../Image/Sports-Mall/04.jpg"),
     quote:
-      "Elevate Your Performance and Unleash Your True Cricketing Potential with Our Cutting-Edge Gear",
+      "Elevate Your Performance and Unleash Your True Sportsing Potential with Our Cutting-Edge Gear",
     saleText: "New Arrivals: Enhance your skills and excel on the field",
     productText: "Upgrade Now",
   },

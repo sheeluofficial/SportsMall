@@ -113,7 +113,7 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   const product = await Product.findById(productId);
 
   const isRevieved = product.reviews.find(
-    (rev) => rev.user.toString() === req.user._id.toString()
+    (rev) => rev.userId.toString() === req.user._id.toString()
   );
 
   if (isRevieved) {
@@ -123,7 +123,6 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
         rev.ratings = ratings;
         rev.comment = comment;
         rev.recommend = recommend;
-        
         rev.title = title;
         product.numOfReviews = product.reviews.length;
       }
@@ -137,7 +136,7 @@ exports.createProductReview = catchAsyncError(async (req, res, next) => {
   let totalRatings = 0;
 
   product.reviews.forEach((review) => {
-    totalRatings += review.rating;
+    totalRatings += review.ratings;
   });
 
   const averageRating = totalRatings / product.reviews.length;
@@ -180,7 +179,7 @@ exports.deleteReview = catchAsyncError(async (req, res, next) => {
   let totalRatings = 0;
 
   reviews.forEach((review) => {
-    totalRatings += review.rating;
+    totalRatings += review.ratings;
   });
 
   let ratings = 0;
