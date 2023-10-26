@@ -22,15 +22,21 @@ import {
 import axios from "axios";
 
 
+
 export const createOrder = (order) => async (dispatch) => {
   try {
     dispatch({ type: CREATE_ORDER_REQUEST });
 
     const config = { headers: { "Content-Type": "application/json" } };
     const { data } = await axios.post("/api/v1/order/new", order, config);
+  console.log(data, "it is order data in order action");
 
     dispatch({ type: CREATE_ORDER_SUCCESS, payload: data });
+
+
+  
   } catch (error) {
+    console.log(error, "it is errror data in order action");
     dispatch({ type: CREATE_ORDER_FAIL, payload: error.response.data.message });
   }
 };
@@ -42,8 +48,10 @@ export const myOrders = () => async (dispatch) => {
 
     const { data } = await axios.get("/api/v1/orders/myOrders");
 
-    dispatch({ type: MY_ORDER_SUCCESS, payload: data.userOrders });
+    console.log("order",data)
+    dispatch({ type: MY_ORDER_SUCCESS, payload: data.orders });
   } catch (error) {
+    console.log("order error",error)
     dispatch({ type: MY_ORDER_FAIL, payload: error.response.data.message });
   }
 };

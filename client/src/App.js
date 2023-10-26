@@ -1,9 +1,17 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import "./App.css";
 
-import Header from "./components/layouts/Header/Header";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+import Payment from "./components/Cart/Payment";
 
+import CricketBallLoader from "./components/layouts/loader/Loader";
+
+import Header from "./components/layouts/Header/Header";
 import Home from "./components/Home/Home";
 import Services from "./components/Terms&Condtions/Service";
 import Footer from "./components/layouts/Footer/Footer";
@@ -18,20 +26,60 @@ import ReturnPolicyPage from "./components/Terms&Condtions/Return";
 import TermsUse from "./components/Terms&Condtions/TermsAndUse";
 import TermsAndConditions from "./components/Terms&Condtions/TermsCondtion";
 import PrivacyPolicy from "./components/Terms&Condtions/Privacy";
+
 import Signup from "./components/User/SignUp";
 import Login from "./components/User/Login";
 import ResetPassword from "./components/User/ResetPassword";
 import ForgetPassword from "./components/User/ForgetPassword";
-import { useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { load_UserProfile } from "./actions/userAction";
-import ProfilePage from "./components/User/Profile";
 import UpdateProfile from "./components/User/UpdateProfile";
 import UpdatePassword from "./components/User/UpdatePassword";
+import ProfilePage from "./components/User/Profile";
 
+import { load_UserProfile } from "./actions/userAction";
+
+import Cart from "./components/Cart/Cart";
+import Shipping from "./components/Cart/Shipping";
+import ConfirmOrder from "./components/Cart/ConfirmOrder";
+import OrderSuccess from "./components/Cart/OrderSuccess";
+import MyOrder from "./components/Order/MyOrder";
 
 function App() {
+  const [stripeApiKey, setStripeApiKey] = useState("");
+
   const dispatch = useDispatch();
+
+  // get STRIPE_API_KEY for payment from backend for connection to stripe payment gateway
+  async function getStripeApiKey() {
+    try {
+      const { data } = await axios.get("/api/v1/stripeapikey");
+      if (
+        data.stripeApiKey !== undefined &&
+        data.stripeApiKey !== null &&
+        data.stripeApiKey !== ""
+      ) {
+        sessionStorage.setItem(
+          "stripeApiKey",
+          JSON.stringify(data.stripeApiKey)
+        );
+      }
+      console.log(data);
+      setStripeApiKey(data.stripeApiKey);
+    } catch (error) {
+      // Handle error if the API call fails
+      console.error("Error fetching Stripe API key:", error);
+    }
+  }
+
+  useEffect(() => {
+    const stripeApiKey = JSON.parse(sessionStorage.getItem("stripeApiKey"));
+    if (stripeApiKey && stripeApiKey !== "") {
+      setStripeApiKey(stripeApiKey);
+    } else {
+      getStripeApiKey();
+    }
+    // eslint-disable-next-line
+  }, []);
+
   useEffect(() => {
     dispatch(load_UserProfile());
 
@@ -149,6 +197,19 @@ function App() {
 
           <Route
             exact
+            path="/cart"
+            render={() => (
+              <>
+                {<Header />}
+                <Cart />
+                <Services />
+                {<Footer />}
+              </>
+            )}
+          />
+
+          <Route
+            exact
             path="/policy/return"
             render={() => (
               <>
@@ -238,8 +299,7 @@ function App() {
             )}
           />
 
-
-<Route
+          <Route
             exact
             path="/profile/update"
             render={() => (
@@ -273,11 +333,82 @@ function App() {
             )}
           />
 
+          <Route
+            exact
+            path="/shipping"
+            render={() => (
+              <>
+                {<Header />}
+                <PrivateRoute exact path="/shipping" component={Shipping} />
+                <Services />
+                {<Footer />}
+              </>
+            )}
+          />
 
+          <Route
+            exact
+            path="/order/confirm"
+            render={() => (
+              <>
+                {<Header />}
+                <PrivateRoute
+                  exact
+                  path="/order/confirm"
+                  component={ConfirmOrder}
+                />
+                <Services />
+                {<Footer />}
+              </>
+            )}
+          />
+
+          <Route
+            exact
+            path="/success"
+            render={() => (
+              <>
+                {<Header />}
+                <PrivateRoute exact path="/success" component={OrderSuccess} />
+                <Services />
+                {<Footer />}
+              </>
+            )}
+          />
+
+          <Route
+            exact
+            path="/orders"
+            render={() => (
+              <>
+                {<Header />}
+                <PrivateRoute exact path="/orders" component={MyOrder} />
+                <Services />
+                {<Footer />}
+              </>
+            )}
+          />
         </Switch>
+
+        <Elements stripe={loadStripe(stripeApiKey)}>
+          <Route exact path="/process/payment">
+            {<Header />}
+            <PrivateRoute exact path="/process/payment" component={Payment} />
+          </Route>
+        </Elements>
       </Router>
     </>
   );
 }
 
 export default App;
+// issues
+// Google auth
+// Mobile number add in schema
+// mobile number verification & Update with otp verification
+// Prduct return
+// Payment refund
+// Multiple address save
+// payment and drop address save
+// Choose presaved address when placing order or write new address
+// use corrent location for address
