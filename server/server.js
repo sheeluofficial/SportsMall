@@ -20,7 +20,13 @@ dotenv.config();
   // Database connection 
   connectDatabase();
 
-  // cloudinary connection.
+ // conncet with cloudinary
+
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+});
 
 
 // Running server

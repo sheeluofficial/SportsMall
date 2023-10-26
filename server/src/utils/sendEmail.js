@@ -1,4 +1,4 @@
-const nodeMailer = require("nodemailer");
+const nodemailer = require("nodemailer");
 require('dotenv').config({ path: './src/config/config.env' });
 // options are pass as arg from userController
 const sendEmail = async (options) => {

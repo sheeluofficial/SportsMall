@@ -1,7 +1,6 @@
 const express = require("express");
 const errorHandlerMid = require("./src/middlewares/errorHandler.middleware.js");
 
-
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 const fileUpload = require("express-fileupload"); // used for image and other files

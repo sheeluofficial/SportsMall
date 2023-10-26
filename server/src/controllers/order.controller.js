@@ -105,7 +105,7 @@ exports.updateOrder = catchAsyncError(async (req, res, next) => {
     order.deliveredAt = Date.now();
   }
 
-  await order.save({ validateBeforeSave: flase });
+  await order.save({ validateBeforeSave: false });
 
   res.status(200).json({
     success: true,

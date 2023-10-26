@@ -4,7 +4,7 @@ const User = require("../models/user.model");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const sendToken = require("../utils/jwtToken");
-
+const cloudinary = require("cloudinary");
 const crypto = require("crypto");
 const sendEmail = require("../utils/sendEmail");
 
@@ -13,18 +13,33 @@ const sendEmail = require("../utils/sendEmail");
 exports.registerUser = catchAsyncError(async (req, res, next) => {
   const { name, email, password } = req.body;
 
+
+     const isUserPresent = await User.find({email :email});
+
+     if(isUserPresent) {
+     
+        return next(new ErrorHandler("user Already present with this Email, Please login to continue", 405));
+      
+     }
+
   const hashedPassword = await bcrypt.hash(password, 8);
+
+  const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+    folder: "Avatar", // this folder cloudainry data base manage by us
+    width: 150,
+    crop: "scale",
+  });
 
   const user = await User.create({
     name,
     email,
     password: hashedPassword,
     avatar: {
-      public_id: "this is a sample id",
-      url: "profilepicUrl",
+      public_id: myCloud.public_id,
+      url: myCloud.secure_url,
     },
   });
-
+console.log(user);
   sendToken(user, 200, res);
 });
 
@@ -99,7 +114,7 @@ exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
     )}/password/reset/${resetToken}`;
   }
 
-  console.log(user);
+  console.log(resetPasswordUrl);
 
   //   const RESET_PASSWORD_URL = `${req.protocol}://${req.get(
   //     "host"
@@ -110,10 +125,11 @@ exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
   try {
     await sendEmail({ email, message, subject: `Ecommerce Password Recovery` });
 
-    res.status(200).json({
+  return  res.status(200).json({
       success: true,
       message: `Email sent to ${user.email} successfully`,
     });
+
   } catch (error) {
     user.resetPasswordToken = undefined;
     user.resetPasswordExpire = undefined;
@@ -126,8 +142,10 @@ exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
 
 // Reset password using token
 exports.resetPassword = catchAsyncError(async (req, res, next) => {
-  const { token, newPassword, confirmPassword } = req.body;
-
+  const { password, confirmPassword } = req.body;
+ const token = req.params.token;
+  console.log(token);
+  
   const user = await User.findOne({
     resetPasswordToken: token,
     resetPasswordExpire: { $gt: Date.now() },
@@ -144,11 +162,11 @@ exports.resetPassword = catchAsyncError(async (req, res, next) => {
 
   // Update the user's password and clear the reset token
 
-  if (newPassword !== confirmPassword) {
+  if (password !== confirmPassword) {
     return next(new ErrorHandler("Password does not match", 400));
   }
 
-  const hashedPassword = await bcrypt.hash(newPassword, 8);
+  const hashedPassword = await bcrypt.hash(password, 8);
   user.password = hashedPassword;
   user.resetPasswordToken = undefined;
   user.resetPasswordExpire = undefined;
@@ -210,7 +228,30 @@ exports.updateProfile = catchAsyncError(async (req, res, next) => {
     email: req.body.email,
   };
 
+
   // Add clowdanary
+
+  // if avatar not empty then
+  if (req.body.avatar !== "") {
+    const user = await userModel.findById(req.user.id);
+    const imageId = user.avatar.public_id;
+
+    //  await cloudinary.v2.uploader.destroy(imageId); // delete old Image from cloudnairy
+    await cloudinary.v2.uploader.destroy(imageId);
+
+    const myCloud = await cloudinary.v2.uploader.upload(req.body.avatar, {
+      folder: "Avatar", // this folder cloudainry data base manage by us
+      width: 150,
+      crop: "scale",
+    });
+
+    newUserData.avatar = {
+      public_id: myCloud.public_id, // id for img
+      url: myCloud.secure_url, // new User data
+    };
+  }
+
+
   const user = await User.findByIdAndUpdate(req.user.id, newUserData, {
     new: true,
     runValidators: true,

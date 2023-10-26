@@ -2,18 +2,55 @@ const catchAsyncError = require("../middlewares/catchAsyncErrors");
 const ErrorHandler = require("../utils/errorHandler");
 const Product = require("../models/product.model");
 const ApiFeatures = require("../utils/apiFeatures");
-
+const cloudinary = require("cloudinary");
 // Create new product -- Admin
 //  Note : update it add cloudnary 
 exports.createProduct = catchAsyncError(async (req, res, next) => {
-  req.body.user = req.user.id;
+  let images = []; 
 
-  const product = await Product.create(req.body);
+  if (req.body.images) {
+    if (typeof req.body.images === "string") {
+      images.push(req.body.images);
+    } else {
+      images = req.body.images;
+    }
 
-  res.status(201).json({
-    success: true,
-    product,
-  });
+    const imagesLinks = [];
+
+    // Split images into chunks due to cloudinary upload limits only 3 images can be uploaded at a time so we are splitting into chunks and uploading them separately eg: 9 images will be split into 3 chunks and uploaded separately
+    const chunkSize = 3;
+    const imageChunks = [];
+    while (images.length > 0) {
+      imageChunks.push(images.splice(0, chunkSize));
+    }
+
+
+    // Upload images in separate requests. for loop will run 3 times if there are 9 images to upload each time uploading 3 images at a time
+    for (let chunk of imageChunks) {
+      const uploadPromises = chunk.map((img) =>
+        cloudinary.v2.uploader.upload(img, {
+          folder: "Products",
+        })
+      );
+
+      
+      const results = await Promise.all(uploadPromises); // wait for all the promises to resolve and store the results in results array eg: [{}, {}, {}] 3 images uploaded successfully and their details are stored in results array
+
+      for (let result of results) { 
+        imagesLinks.push({
+          product_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+    }
+
+    req.body.user = req.user.id;
+    req.body.images = imagesLinks;
+  }
+
+  const data = await Product.create(req.body);
+
+  res.status(200).json({ success: true, data: data });
 });
 
 // Update product --Admin
@@ -22,7 +59,36 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
-    return next(new ErrorHandler("Product not found", 401));
+    return next(new ErrorHandler("Product not found", 404));
+  }
+
+  let images = [];
+
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else {
+    images = req.body.images;
+  }
+
+  if (images !== undefined) {
+    // Deleting Images From Cloudinary
+    for (let i = 0; i < product.images.length; i++) {
+      await cloudinary.v2.uploader.destroy(product.images[i].product_id);
+    }
+
+    const imagesLinks = [];
+    for (let img of images) {
+      const result = await cloudinary.v2.uploader.upload(img, {
+        folder: "Products",
+      });
+
+      imagesLinks.push({
+        product_id: result.public_id,
+        url: result.secure_url,
+      });
+    }
+
+    req.body.images = imagesLinks;
   }
 
   product = await Product.findByIdAndUpdate(req.params.id, req.body, {
@@ -31,9 +97,9 @@ exports.updateProduct = catchAsyncError(async (req, res, next) => {
     useFindAndModify: false,
   });
 
-  res.status(200).json({
-    message: "Product updated",
-    product,
+  res.status(201).json({
+    success: true,
+    product: product,
   });
 });
 
@@ -43,14 +109,19 @@ exports.deleteProduct = catchAsyncError(async (req, res, next) => {
   let product = await Product.findById(req.params.id);
 
   if (!product) {
-    return next(new ErrorHandler("Product not found", 401));
+    return next(new ErrorHandler("Product not found", 404));
   }
 
-  product = await Product.findByIdAndDelete(req.params.id);
+  // Deleting Images From Cloudinary
+  for (let i = 0; i < product.images.length; i++) {
+    await cloudinary.v2.uploader.destroy(product.images[i].product_id);
+  }
 
-  res.status(200).json({
-    message: "Product Deleted",
+  await product.remove();
+
+  res.status(201).json({
     success: true,
+    message: "Product delete successfully",
   });
 });
 
