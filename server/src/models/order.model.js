@@ -1,14 +1,14 @@
 const mongoose = require("mongoose");
 const orderSchema = new mongoose.Schema({
   shippingInfo: {
-    firstName : {
-        type: String,
-        required: true,
-      },
-      lastName : {
-        type: String,
-        required: true,
-      },
+    firstName: {
+      type: String,
+      required: true,
+    },
+    lastName: {
+      type: String,
+      required: true,
+    },
     address: {
       type: String,
       required: true,
@@ -33,10 +33,10 @@ const orderSchema = new mongoose.Schema({
       type: Number,
       required: true,
     },
-    email : {
-        type: String,
-        required: true,
-      },
+    email: {
+      type: String,
+      required: true,
+    },
   },
   orderItems: [
     {
@@ -56,7 +56,7 @@ const orderSchema = new mongoose.Schema({
         type: String,
         required: true,
       },
-      product: {
+      productId: {
         type: mongoose.Schema.ObjectId,
         ref: "Product",
         required: true,
@@ -78,41 +78,41 @@ const orderSchema = new mongoose.Schema({
       type: String,
       required: true,
     },
-    paidAt: {
-      type: Date,
-      required: true,
-    },
-    itemsPrice: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    taxPrice: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    shippingPrice: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
-    totalPrice: {
-      type: Number,
-      default: 0,
-      required: true,
-    },
+  },
+  paidAt: {
+    type: Date,
+    required: true,
+  },
+  itemsPrice: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  taxPrice: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  shippingPrice: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
+  totalPrice: {
+    type: Number,
+    default: 0,
+    required: true,
+  },
 
-    orderStatus: {
-      type: String,
-      required: true,
-      default: "Processing",
-    },
-    deliveredAt: Date,
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
+  orderStatus: {
+    type: String,
+    required: true,
+    default: "Processing",
+  },
+  deliveredAt: Date,
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 

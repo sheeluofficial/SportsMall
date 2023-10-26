@@ -20,7 +20,7 @@ app.use(cors());
 const  product = require("./src/routes/product.routes.js");
 const user = require("./src/routes/user.routes");
 const order = require("./src/routes/order.routes.js");
-
+const payment = require("./src/routes/payment.routes.js");
 app.get("/",(req,res)=>{
     res.status(200).json({
         message:"Server is running",
@@ -30,6 +30,7 @@ app.get("/",(req,res)=>{
 app.use("/api/v1",product);
 app.use("/api/v1",user);
 app.use("/api/v1",order);
+app.use("/api/v1",payment);
 
 
 // Middleware for error handling

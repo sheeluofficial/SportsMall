@@ -18,7 +18,7 @@ exports.registerUser = catchAsyncError(async (req, res, next) => {
 
      if(isUserPresent) {
      
-        return next(new ErrorHandler("user Already present with this Email, Please login to continue", 405));
+        return next(new ErrorHandler("user Already present with this Email, Please login to continue", 409));
       
      }
 
