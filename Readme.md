@@ -317,7 +317,7 @@ This guide will walk you through the process of hosting your complete MERN stack
 
 - Congratulations! Your app is now live and accessible.
 
-## Contributions
+<!-- ## Contributions -->
 
 <!-- | Contributor                                           |
 | ----------------------------------------------------- |
