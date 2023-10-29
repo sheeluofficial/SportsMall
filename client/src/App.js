@@ -1,5 +1,5 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import React, { Suspense, useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
@@ -42,6 +42,24 @@ import Shipping from "./components/Cart/Shipping";
 import ConfirmOrder from "./components/Cart/ConfirmOrder";
 import OrderSuccess from "./components/Cart/OrderSuccess";
 import MyOrder from "./components/Order/MyOrder";
+
+const LazyDashboard = React.lazy(() => import("./components/Admin/Dashboard"));
+const LazyProductList = React.lazy(() =>
+  import("./component/Admin/ProductList")
+);
+const LazyOrderList = React.lazy(() => import("./components/Admin/OrderList"));
+const LazyUserList = React.lazy(() => import("./components/Admin/UserList"));
+const LazyUpdateProduct = React.lazy(() =>
+  import("./component/Admin/UpdateProduct")
+);
+const LazyProcessOrder = React.lazy(() =>
+  import("./component/Admin/ProcessOrder")
+);
+const LazyUpdateUser = React.lazy(() => import("./components/Admin/UpdateUser"));
+const LazyNewProduct = React.lazy(() => import("./components/Admin/NewProduct"));
+const LazyProductReviews = React.lazy(() =>
+  import("./components/Admin/ProductReviews")
+);
 
 function App() {
   const [stripeApiKey, setStripeApiKey] = useState("");
@@ -389,6 +407,66 @@ function App() {
             )}
           />
         </Switch>
+
+        <Suspense fallback={<CricketBallLoader />}>
+          <Switch>
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/dashboard"
+              component={LazyDashboard}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/products"
+              component={LazyProductList}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/product/:id"
+              component={LazyUpdateProduct}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/reviews"
+              component={LazyProductReviews}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/orders"
+              component={LazyOrderList}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/order/:id"
+              component={LazyProcessOrder}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/new/product"
+              component={LazyNewProduct}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/users"
+              component={LazyUserList}
+            />
+            <PrivateRoute
+              isAdmin={true}
+              exact
+              path="/admin/user/:id"
+              component={LazyUpdateUser}
+            />
+          </Switch>
+        </Suspense>
+
 
         <Elements stripe={loadStripe(stripeApiKey)}>
           <Route exact path="/process/payment">
