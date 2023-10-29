@@ -319,8 +319,8 @@ This guide will walk you through the process of hosting your complete MERN stack
 
 ## Contributions
 
-| Contributor                                           |
+<!-- | Contributor                                           |
 | ----------------------------------------------------- |
 | [ImgBotApp](https://github.com/ImgBotApp)             |
-| [MehraDevesh2022](https://github.com/MehraDevesh2022) |
+| [MehraDevesh2022](https://github.com/MehraDevesh2022) | -->
 
