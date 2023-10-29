@@ -9,6 +9,9 @@ const cors = require("cors");
 
 const app = express();
 
+
+
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(bodyParser.json({ limit: "50mb" }));
@@ -34,6 +37,15 @@ app.use("/api/v1",payment);
 
 
 // Middleware for error handling
+
+
+const __dirname1 = path.resolve();
+
+app.use(express.static(path.join(__dirname1, "/client/build")));
+
+app.get("*", (req, res) =>
+  res.sendFile(path.resolve(__dirname1, "client", "build", "index.html"))
+);
 
 app.use(errorHandlerMid)
 

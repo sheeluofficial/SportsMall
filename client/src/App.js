@@ -45,15 +45,15 @@ import MyOrder from "./components/Order/MyOrder";
 
 const LazyDashboard = React.lazy(() => import("./components/Admin/Dashboard"));
 const LazyProductList = React.lazy(() =>
-  import("./component/Admin/ProductList")
+  import("./components/Admin/ProductList")
 );
 const LazyOrderList = React.lazy(() => import("./components/Admin/OrderList"));
 const LazyUserList = React.lazy(() => import("./components/Admin/UserList"));
 const LazyUpdateProduct = React.lazy(() =>
-  import("./component/Admin/UpdateProduct")
+  import("./components/Admin/UpdateProduct")
 );
 const LazyProcessOrder = React.lazy(() =>
-  import("./component/Admin/ProcessOrder")
+  import("./components/Admin/ProcessOrder")
 );
 const LazyUpdateUser = React.lazy(() => import("./components/Admin/UpdateUser"));
 const LazyNewProduct = React.lazy(() => import("./components/Admin/NewProduct"));
@@ -480,13 +480,7 @@ function App() {
 }
 
 export default App;
-// issues
-// Google auth
-// Mobile number add in schema
-// mobile number verification & Update with otp verification
-// Prduct return
-// Payment refund
-// Multiple address save
-// payment and drop address save
-// Choose presaved address when placing order or write new address
-// use corrent location for address
+
+
+
+
