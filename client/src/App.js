@@ -62,6 +62,9 @@ const LazyProductReviews = React.lazy(() =>
 );
 
 function App() {
+
+  console.log(process.env.SERVER_URL);
+  
   const [stripeApiKey, setStripeApiKey] = useState("");
 
   const dispatch = useDispatch();
@@ -80,7 +83,7 @@ function App() {
           JSON.stringify(data.stripeApiKey)
         );
       }
-      console.log(data);
+      
       setStripeApiKey(data.stripeApiKey);
     } catch (error) {
       // Handle error if the API call fails
