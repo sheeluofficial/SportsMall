@@ -35,6 +35,7 @@ class ApiFeatures {
         this.query = this.query.find(JSON.parse(queryStr))
         return this 
 
+        
     }
 
     pagination(resultPerPage) {
@@ -44,6 +45,8 @@ class ApiFeatures {
         return this
     }
 
+
+    
    
 }
 
