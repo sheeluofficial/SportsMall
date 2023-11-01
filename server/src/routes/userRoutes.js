@@ -13,7 +13,7 @@ const {
   getSingleUser,
   deleteUser,
   updateUserRole,
-} = require("../controllers/user.controller");
+} = require("../controllers/userController");
 const { isAuthenticatedUser, authorizeRoles } = require("../middlewares/auth");
 
 router.route("/register").post(registerUser);

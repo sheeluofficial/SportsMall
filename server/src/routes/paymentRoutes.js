@@ -1,7 +1,7 @@
 const express = require("express");
 
 const { isAuthenticatedUser } = require("../middlewares/auth");
-const { processPayment, sendStripeApiKey } = require("../controllers/payment.controller");
+const { processPayment, sendStripeApiKey } = require("../controllers/paymentController");
 
 const router  = express.Router();
 

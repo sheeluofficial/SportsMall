@@ -1,5 +1,5 @@
 const express = require("express");
-const errorHandlerMid = require("./src/middlewares/errorHandler.middleware.js");
+const errorHandlerMid = require("./src/middlewares/errorHandlerMiddleware.js");
 
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
@@ -20,10 +20,10 @@ app.use(fileUpload());
 app.use(cors());
 
 // route imports 
-const  product = require("./src/routes/product.routes.js");
-const user = require("./src/routes/user.routes");
-const order = require("./src/routes/order.routes.js");
-const payment = require("./src/routes/payment.routes.js");
+const  product = require("./src/routes/productRoutes.js");
+const user = require("./src/routes/userRoutes.js");
+const order = require("./src/routes/orderRoutes.js");
+const payment = require("./src/routes/paymentRoutes.js");
 app.get("/",(req,res)=>{
     res.status(200).json({
         message:"Server is running",
