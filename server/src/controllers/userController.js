@@ -105,14 +105,16 @@ exports.generateResetPasswordToken = catchAsyncError(async (req, res, next) => {
 
   let resetPasswordUrl = "";
 
-  const isLocal = req.hostname === "localhost" || req.hostname === "127.0.0.1";
-  if (isLocal) {
-    resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
-  } else {
-    resetPasswordUrl = `${req.protocol}://${req.get(
-      "host"
-    )}/password/reset/${resetToken}`;
-  }
+  // const isLocal = req.hostname === "localhost" || req.hostname === "127.0.0.1";
+  // if (isLocal) {
+  //   resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
+  // } else {
+  //   resetPasswordUrl = `${req.protocol}://${req.get(
+  //     "host"
+  //   )}/password/reset/${resetToken}`;
+  // }
+
+  resetPasswordUrl = `${process.env.FRONTEND_URL}/password/reset/${resetToken}`;
 
   console.log(resetPasswordUrl);
 

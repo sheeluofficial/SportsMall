@@ -13,8 +13,7 @@ process.on("uncaughtException",(err)=>{
     // server.close(()=>{
     //     process.exit(1)
     // })
-})
-
+});
 
 
 // Config
@@ -50,4 +49,4 @@ process.on("unhandledRejection",(err)=>{
         process.exit(1)
     })
     
-})
+});
