@@ -9,14 +9,14 @@ import RemoveShoppingCartIcon from "@material-ui/icons/RemoveShoppingCart";
 import { Link } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 // import { useNavigate } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CartItem from "./CartItem";
 import {
   dispalyMoney,
   generateDiscountedPrice,
 } from "../DisplayMoney/DisplayMoney";
 const Cart = () => {
-  const history = useHistory();
+  const history = useNavigate();
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.cart);
 
@@ -63,7 +63,7 @@ const Cart = () => {
 
   const checkoutHandler = () => {
    
-    history.push("/login?redirect=/shipping");
+    history("/login?redirect=/shipping");
   };
 
   // claculte price after discount
@@ -94,7 +94,7 @@ const Cart = () => {
           <Typography
             variant="body2"
             className="cartText2"
-            onClick={() => history.push("/products")}
+            onClick={() => history("/products")}
           >
             Continue Shopping
           </Typography>

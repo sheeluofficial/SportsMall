@@ -13,7 +13,7 @@ import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import LockOpenIcon from "@mui/icons-material/LockOpen";
 import { useDispatch, useSelector } from "react-redux";
-import { useHistory, useLocation } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { login, clearErrors } from "../../actions/userAction";
 import CricketBallLoader from "../layouts/loader/Loader";
 import { useAlert } from "react-alert";
@@ -22,7 +22,7 @@ import MetaData from "../layouts/MataData/MataData"
 
 export default function Login() {
 
-    const history = useHistory();
+    const history = useNavigate();
     const location = useLocation();
 
     const dispatch = useDispatch();
@@ -69,7 +69,7 @@ export default function Login() {
 
      if (isAuthenticated) {
       alert.success("You are Logged in successfully.");
-       history.push(redirect);
+       history(redirect);
      }
    }, [dispatch, isAuthenticated, loading, error, alert , history , redirect]);
 

@@ -5,25 +5,25 @@ import Typography from "@material-ui/core/Typography";
 import { ExitToApp as LogoutIcon } from "@material-ui/icons";
 import { Link } from "react-router-dom";
 import "./Profile.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { logout } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 const ProfilePage = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const { user, isAuthenticated } = useSelector((state) => state.userData);
 
   const logoutHandler = () => {
     dispatch(logout());
     alert.success("Logged out successfully");
-    history.push("/login");
+    history("/login");
   };
   useEffect(() => {
     // if user not logged in
     if (isAuthenticated === false) {
-      history.push("/login");
+      history("/login");
     }
   }, [history, isAuthenticated]);
 

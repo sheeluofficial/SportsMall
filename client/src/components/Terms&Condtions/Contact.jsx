@@ -10,7 +10,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 import MetaData from "../layouts/MataData/MataData";
 const useStyles = makeStyles((theme) => ({
@@ -173,7 +173,7 @@ const useStyles = makeStyles((theme) => ({
 const ContactForm = () => {
   const classes = useStyles();
   const alert = useAlert();
-  const history = useHistory();
+  const history = useNavigate();
   const handleCall = () => {
     window.location.href = "tel:+9506397156";
   };
@@ -181,7 +181,7 @@ const ContactForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     alert.success("Your message has been sent successfully");
-    history.push("/");
+    history("/");
   };
 
   return (

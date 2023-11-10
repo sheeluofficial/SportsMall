@@ -1,5 +1,5 @@
 import React from "react";
-import { Link , useHistory } from "react-router-dom";
+import { Link , useNavigate } from "react-router-dom";
 import { Avatar, Typography, Button } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 import DashboardIcon from "@mui/icons-material/Dashboard";
@@ -106,11 +106,11 @@ function Sidebar() {
   const { user, loading } = useSelector((state) => state.userData); 
 
 
-  const history = useHistory();
+  const history = useNavigate();
 
 function accountHandler() {
 
-  history.push("/account");
+  history("/account");
 }
 
   return (

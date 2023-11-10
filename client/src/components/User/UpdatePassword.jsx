@@ -11,10 +11,10 @@ import { updatePassword, clearErrors } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 import { UPDATE_PASSWORD_RESET } from "../../constants/userConstanat";
 import MetaData from "../layouts/MataData/MataData";
-import { useHistory } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom"; 
 
 function UpdatePassword() {
-  const history = useHistory();
+  const history = useNavigate();
   const dispatch = useDispatch();
   const { loading, isUpdated, error } = useSelector(
     (state) => state.profileData
@@ -69,7 +69,7 @@ function UpdatePassword() {
       dispatch({
         type: UPDATE_PASSWORD_RESET,
       });
-      history.push("/account");
+      history("/account");
     }
   }, [dispatch, error, alert, isUpdated, loading, history]);
 

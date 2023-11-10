@@ -8,7 +8,7 @@ import {
   clearErrors,
   deleteProductReview,
 } from "../../actions/productAction";
-import {useHistory } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import DeleteIcon from "@material-ui/icons/Delete";
@@ -178,7 +178,7 @@ const useStyles = makeStyles((theme) => ({
 function ProductReviews() {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
   const [toggle, setToggle] = useState(false);
   const { error, reviews, loading } = useSelector(
@@ -211,7 +211,7 @@ function ProductReviews() {
     }
     if (isDeleted) {
       alert.success("Review Deleted Successfully");
-      history.push("/admin/reviews");
+      history("/admin/reviews");
       dispatch({ type: DELETE_REVIEW_RESET });
     }
   }, [dispatch, error, alert, deleteError, isDeleted, productId, history]);

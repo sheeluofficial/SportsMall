@@ -13,7 +13,7 @@ import { getAllOrders } from "../../actions/orderAction";
 import { getAllUsers } from "../../actions/userAction";
 import Navbar from "./Navbar";
 import Sidebar from "./Siderbar";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import { Typography } from "@material-ui/core";
 import ProductImg from "../../Image/admin/products.png";
@@ -270,7 +270,7 @@ const useStyles = makeStyles((theme) => ({
 
 function Dashboard() {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
   const dispatch = useDispatch();
   const [toggle, setToggle] = useState(false);
   const { products, loading, error } = useSelector((state) => state.products);
@@ -478,7 +478,7 @@ function Dashboard() {
                       transform: "scale(1.1)",
                     },
                   }}
-                  onClick={() => history.push("/admin/products")}
+                  onClick={() => history("/admin/products")}
                 >
                   <div className={classes.headerConetnt}>
                     <ShoppingCart
@@ -511,7 +511,7 @@ function Dashboard() {
                       transform: "scale(1.1)",
                     },
                   }}
-                  onClick={() => history.push("/admin/orders")}
+                  onClick={() => history("/admin/orders")}
                 >
                   <div className={classes.headerConetnt}>
                     <AssignmentInd
@@ -543,7 +543,7 @@ function Dashboard() {
                       transform: "scale(1.1)",
                     },
                   }}
-                  onClick={() => history.push("/admin/users")}
+                  onClick={() => history("/admin/users")}
                 >
                   <div className={classes.headerConetnt}>
                     <People

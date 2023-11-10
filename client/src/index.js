@@ -18,7 +18,7 @@ const options = {
 ReactDOM.createRoot(document.getElementById("root")).render(
   <>
     {/* Wrap the entire application with BrowserRouter */}
-    <BrowserRouter>
+    {/* <BrowserRouter> */}
     
     <ThemeProvider theme={theme}>
       <Provider store={store}>
@@ -27,6 +27,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         </AlertProvider>
       </Provider>
     </ThemeProvider>
-    </BrowserRouter>
+    {/* </BrowserRouter> */}
   </>
 );

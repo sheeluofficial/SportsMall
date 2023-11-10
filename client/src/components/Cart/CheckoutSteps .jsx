@@ -1,7 +1,7 @@
 import React from "react";
 import { makeStyles, withStyles } from "@material-ui/core/styles";
 import { Stepper, Step, StepLabel, StepConnector } from "@material-ui/core";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -117,7 +117,7 @@ const ColorlibStepIcon = ({ active, completed, icon, onClick }) => {
 
 const CheckoutSteps = ({ activeStep }) => {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
 
   const steps = [
     { label: "BAG", icon: "1", link: "/cart" },
@@ -128,7 +128,7 @@ const CheckoutSteps = ({ activeStep }) => {
 
   const handleStepClick = (stepIndex) => {
     if (stepIndex < activeStep) {
-      history.push(steps[stepIndex].link);
+      history(steps[stepIndex].link);
     }
   };
 

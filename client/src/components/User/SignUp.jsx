@@ -14,7 +14,7 @@ import { Link } from "react-router-dom";
 import { signUp, clearErrors } from "../../actions/userAction";
 import { useDispatch, useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import LockOutlinedIcon from "@material-ui/icons/LockOutlined";
 import useStyles from "./LoginFromStyle";
 import Visibility from "@mui/icons-material/Visibility";
@@ -39,7 +39,7 @@ function Signup() {
     checkbox1: false,
     checkbox2: false,
   });
-  const history = useHistory();
+  const history = useNavigate();
 
   const dispatch = useDispatch();
   const alert = useAlert();
@@ -54,7 +54,7 @@ function Signup() {
     
     if (isAuthenticated) {
       alert.success("User Registered Successfully");
-      history.push("/account");
+      history("/account");
     }
   }, [dispatch, isAuthenticated, loading, error, alert , history]);
 

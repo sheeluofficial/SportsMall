@@ -10,14 +10,14 @@ import {
 import { useAlert } from "react-alert";
 import { UPDATE_PROFILE_RESET } from "../../constants/userConstanat";
 import MetaData from "../layouts/MataData/MataData";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import UpdateIcon from "@mui/icons-material/Update";
 import useStyles from "./LoginFromStyle";
 import { Link } from "react-router-dom";
 import CloudUploadIcon from "@material-ui/icons/CloudUpload";
 
 function UpdateProfile() {
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
   const dispatch = useDispatch();
   const { error, isUpdated, loading } = useSelector(
@@ -94,7 +94,7 @@ function UpdateProfile() {
         type: UPDATE_PROFILE_RESET,
       });
 
-      history.push("/account");
+      history("/account");
 
       dispatch(load_UserProfile());
     }

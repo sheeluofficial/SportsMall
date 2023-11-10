@@ -5,7 +5,7 @@ import { saveShippingInfo } from "../../actions/cartAction";
 import MetaData from "../layouts/MataData/MataData";
 import CheckoutSteps from "./CheckoutSteps ";
 import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import {
   Typography,
@@ -68,7 +68,7 @@ const useStyles = makeStyles((theme) => ({
 const Shipping = () => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const { shippingInfo } = useSelector((state) => state.cart);
 
   const classes = useStyles();
@@ -174,7 +174,7 @@ const [isPhoneNoValid, setIsPhoneNoValid] = React.useState(true);
        lastName,
      })
    );
-   history.push("/process/payment");
+   history("/process/payment");
  };
 
 

@@ -7,14 +7,14 @@ import CartIcon from "./CartIcon";
 import FlagSelect from "../../Home/Flag";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
 import { Link } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import { useSelector } from "react-redux";
 
 import ProfileModal from "./ProfileModel";
 
 function Header() {
-  const history = useHistory();
+  const history = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.userData);
 
   const [searchBarActive, setSearchBarActive] = useState(false);
@@ -47,9 +47,9 @@ function Header() {
   const handleSearchFormSubmit = (event) => {
     event.preventDefault();
     if (searchValue.trim()) {
-      history.push(`/products/${searchValue}`);
+      history(`/products/${searchValue}`);
     } else {
-      history.push("/products");
+      history("/products");
     }
   };
 

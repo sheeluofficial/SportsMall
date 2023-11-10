@@ -7,7 +7,7 @@ import {
   getAdminProducts,
   deleteProduct,
 } from "../../actions/productAction";
-import { Link, useHistory } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert"; 
 
 import EditIcon from "@material-ui/icons/Edit";
@@ -21,7 +21,7 @@ import { DELETE_PRODUCT_RESET } from "../../constants/productsConstatns";
 function ProductList() {
   const dispatch = useDispatch();
   const alert = useAlert();
-  const history = useHistory();
+  const history = useNavigate();
   const [toggle, setToggle] = useState(false);
 
   const { error, products, loading } = useSelector((state) => state.products);

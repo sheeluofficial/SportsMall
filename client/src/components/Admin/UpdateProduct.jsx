@@ -18,9 +18,9 @@ import {
   clearErrors,
   getProductDetails,
 } from "../../actions/productAction";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { UPDATE_PRODUCT_RESET } from "../../constants/productsConstatns";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Box from "@material-ui/core/Box";
 import ShoppingCartOutlinedIcon from "@material-ui/icons/ShoppingCartOutlined";
@@ -35,11 +35,11 @@ import Navbar from "./Navbar";
 import useStyles from "../User/LoginFromStyle";
 function UpdateProduct() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
 
   const classes = useStyles();
-  const productId = useRouteMatch().params.id;
+  const {id:productId} = useParams();
   const { error, product } = useSelector((state) => state.productDetails);
 
   const { loading, error: updateError, isUpdated } = useSelector(
@@ -101,7 +101,7 @@ function UpdateProduct() {
 
     if (isUpdated) {
       alert.success("Product Updated Successfully");
-      history.push("/admin/products");
+      history("/admin/products");
       dispatch({ type: UPDATE_PRODUCT_RESET });
     }
   }, [

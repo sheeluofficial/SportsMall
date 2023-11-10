@@ -13,7 +13,7 @@ import Navbar from "./Navbar";
 import Loader from "../layouts/loader/Loader";
 import { getAllUsers, clearErrors, deleteUser } from "../../actions/userAction";
 import { DELETE_USER_RESET } from "../../constants/userConstanat";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 function UserList() {
   const dispatch = useDispatch();
@@ -22,7 +22,7 @@ function UserList() {
     (state) => state.profileData
   );
   const alert = useAlert();
-  const history = useHistory();
+  const history = useNavigate();
   const deleteUserHandler = (id) => {
     dispatch(deleteUser(id));
   };
@@ -40,7 +40,7 @@ function UserList() {
 
     if (isDeleted) {
       alert.success(message);
-      history.push("/admin/users");
+      history("/admin/users");
       dispatch({ type: DELETE_USER_RESET });
     }
 

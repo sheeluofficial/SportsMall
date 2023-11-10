@@ -1,9 +1,10 @@
 import React from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { EffectCoverflow, Pagination, A11y, Autoplay } from "swiper";
-import "swiper/swiper-bundle.min.css";
-
-import "swiper/swiper.min.css";
+import { EffectCoverflow, Pagination, A11y, Autoplay } from "swiper/modules";
+import "swiper/swiper-bundle.css";
+import "swiper/css";
+import 'swiper/css/pagination';
+// import "swiper/swiper.min.css";
 import "./FeatureSlider.css";
 import { Link } from "react-router-dom";
 import {

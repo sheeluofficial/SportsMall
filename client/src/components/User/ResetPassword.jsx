@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { resetPassword, clearErrors } from "../../actions/userAction";
 import { useAlert } from "react-alert";
 import MetaData from "../layouts/MataData/MataData";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CricketBallLoader from "../layouts/loader/Loader";
 import { Avatar, Button, TextField, Typography } from "@material-ui/core";
 import LockResetIcon from "@mui/icons-material/LockReset";
@@ -15,8 +15,8 @@ import { Link } from "react-router-dom";
 
 function ResetPassword() {
 
-  const match = useRouteMatch();
-const history = useHistory();
+  const match = useParams();
+const history = useNavigate();
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -57,7 +57,7 @@ const history = useHistory();
 
     if (success) {
       alert.success("Password Updated Successfully");
-      history.push("/login");
+      history("/login");
     }
   }, [dispatch, error, alert, success, history]);
 
@@ -74,7 +74,7 @@ const history = useHistory();
    myForm.set("password", password);
     myForm.set("confirmPassword", confirmPassword);
 
-    dispatch(resetPassword(match.params.token, myForm));
+    dispatch(resetPassword(match.token, myForm));
     
   }
 

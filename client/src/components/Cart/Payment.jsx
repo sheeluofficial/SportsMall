@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import MetaData from "../layouts/MataData/MataData";
 import { useAlert } from "react-alert";
 import axios from "axios";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import OrderDetailsSection from "./OrderDetails";
 import DummyCard from "./DummyCard";
 import { clearErrors, createOrder } from "../../actions/orderAction";
@@ -337,7 +337,7 @@ const useStyles = makeStyles((theme) => ({
 
 const PaymentComponent = () => {
   const classes = useStyles();
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
   const stripe = useStripe();
   const elements = useElements();
@@ -480,7 +480,7 @@ const PaymentComponent = () => {
 
       dispatch(clearCart());
 
-      history.push("/success");
+      history("/success");
     }
     if (error) {
       alert.error(error);
@@ -773,7 +773,7 @@ const PaymentComponent = () => {
                     <EditIcon
                       className={classes.editIcon}
                       onClick={() => {
-                        history.push("/shipping");
+                        history("/shipping");
                       }}
                     />
                   </div>
@@ -827,7 +827,7 @@ const PaymentComponent = () => {
                     <EditIcon
                       className={classes.editIcon}
                       onClick={() => {
-                        history.push("/shipping");
+                        history("/shipping");
                       }}
                     />
                   </div>

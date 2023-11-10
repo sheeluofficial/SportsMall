@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getAllOrders, clearErrors  , deleteOrder} from "../../actions/orderAction";
 import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import EditIcon from "@material-ui/icons/Edit";
@@ -16,7 +16,7 @@ import { DELETE_ORDER_RESET } from "../../constants/orderConstant";
 
 function OrderList() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
  
   const { error, loading, orders } = useSelector((state) => state.allOrders);
@@ -59,7 +59,7 @@ function OrderList() {
     }
     if(isDeleted){
           alert.success("Order Deleted Successfully");
-             history.push("/admin/orders");
+             history("/admin/orders");
              dispatch({ type: DELETE_ORDER_RESET });
 
     }

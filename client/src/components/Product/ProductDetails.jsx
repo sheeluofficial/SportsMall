@@ -15,7 +15,7 @@ import LocalShippingOutlinedIcon from "@mui/icons-material/LocalShippingOutlined
 import Rating from "@material-ui/lab/Rating";
 import "./ProductDetails.css";
 import { useSelector, useDispatch } from "react-redux";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import useActive from "../hook/useActive";
 import ReviewCard from "./ReviewCard";
 import {
@@ -30,7 +30,7 @@ import Button from "@mui/material/Button";
 import { PRODUCT_DETAILS_RESET } from "../../constants/productsConstatns";
 
 const ProductDetails = () => {
-  const match = useRouteMatch();
+  const {id} = useParams();
   const dispatch = useDispatch();
   const alert = useAlert();
 
@@ -56,14 +56,14 @@ useEffect(() => {
     handleActive(0);
     dispatch({ type: PRODUCT_DETAILS_RESET });
   }
-  dispatch(getProductDetails(match.params.id));
+  dispatch(getProductDetails(id));
   // eslint-disable-next-line react-hooks/exhaustive-deps
 }, [
   dispatch,
   error,
   alert,
   success,
-  match.params.id
+  id
 
 ]);
 
@@ -71,7 +71,7 @@ useEffect(() => {
   // handling Add-to-cart
   const handleAddItem = () => {
 
-    dispatch(addItemToCart(match.params.id, quantity));
+    dispatch(addItemToCart(id, quantity));
     alert.success("Item Added To Cart");
   };
 

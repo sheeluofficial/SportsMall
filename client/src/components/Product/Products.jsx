@@ -3,7 +3,7 @@ import "./Products.css";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../layouts/loader/Loader";
 import { useAlert } from "react-alert";
-import { useRouteMatch } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import MetaData from "../layouts/MataData/MataData";
 import { clearErrors, getProduct } from "../../actions/productAction";
 import ProductCard from "../Home/ProductCard";
@@ -38,8 +38,8 @@ const categories = [
 ];
 
 function Products() {
-  const match = useRouteMatch();
-  let keyword = match.params.keyword;
+  const {keyword} = useParams();
+ 
   const dispatch = useDispatch();
   const {
     products,

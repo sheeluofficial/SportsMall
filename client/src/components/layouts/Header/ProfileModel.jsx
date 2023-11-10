@@ -10,7 +10,7 @@ import { Modal, Avatar } from "@material-ui/core";
 import { AccountCircle as AccountCircleIcon } from "@material-ui/icons";
 import ArrowDropDownIcon from "@material-ui/icons/ArrowDropDown";
 import "./ProfileModel.css";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAlert } from "react-alert";
 import { useDispatch } from "react-redux";
 import { logout } from "../../../actions/userAction";
@@ -18,7 +18,7 @@ import { logout } from "../../../actions/userAction";
 const ProfileModal = ({ user, isAuthenticated }) => {
   const alert = useAlert();
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
   const modalRef = useRef(null);
 
@@ -62,17 +62,17 @@ const ProfileModal = ({ user, isAuthenticated }) => {
 
   function dashboardHandler() {
      setIsOpen(false);
-    history.push("/admin/dashboard");
+    history("/admin/dashboard");
   }
 
   function accountHandler() {
      setIsOpen(false);
-    history.push("/account");
+    history("/account");
   }
 
   function ordersHandler() {
      setIsOpen(false);
-    history.push("/orders");
+    history("/orders");
   }
 
   function logoutUserHandler() {
@@ -84,13 +84,13 @@ const ProfileModal = ({ user, isAuthenticated }) => {
   function cartHandler() {
       setIsOpen(false);
 
-    history.push("/cart");
+    history("/cart");
   }
 
   function loginHandler() {
       setIsOpen(false);
       
-    history.push("/login");
+    history("/login");
   }
 
   return (

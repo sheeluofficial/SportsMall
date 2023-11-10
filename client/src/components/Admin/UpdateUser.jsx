@@ -13,7 +13,7 @@ import {
   clearErrors,
 } from "../../actions/userAction";
 import Loader from "../layouts/loader/Loader";
-import { useHistory, useRouteMatch } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 import {
@@ -195,8 +195,8 @@ const useStyles = makeStyles((theme) => ({
 function UpdateUser() {
   const dispatch = useDispatch();
   const alert = useAlert();
-  const userId = useRouteMatch().params.id;
-  const history = useHistory();
+  const {id: userId }= useParams();
+  const history = useNavigate();
   const classes = useStyles();
   const { loading, error, user } = useSelector((state) => state.userDetails);
   const { loading: updateLoading, error: updateError, isUpdated } = useSelector(
@@ -235,7 +235,7 @@ function UpdateUser() {
 
     if (isUpdated) {
       alert.success("User Updated Successfully");
-      history.push("/admin/users");
+      history("/admin/users");
       dispatch({ type: UPDATE_USER_RESET });
     }
   }, [dispatch, alert, error, history, isUpdated, updateError, user, userId]);

@@ -6,7 +6,7 @@ import { useStyles } from "./ReviewStyle";
 import MyCard from "./Card";
 import { useSelector } from "react-redux";
 import { useAlert } from "react-alert";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 const DialogBox = lazy(() => import("./DialogBox"));
 
 
@@ -14,7 +14,7 @@ const ReviewCard = ({ product }) => {
   const classes = useStyles();
   const { isAuthenticated } = useSelector((state) => state.userData);
   const alert = useAlert();
-  const history = useHistory();
+  const history = useNavigate();
   const [sortValue, setSortValue] = useState("highest");
 
   const handleSortChange = (event) => {
@@ -46,7 +46,7 @@ console.log(product,"inside review");
   const handleClickOpen = () => {
      if (!isAuthenticated) {
       alert.error("Please Login to write a review");
-     history.push("/login");
+     history("/login");
     }
     setOpen(true);
   };

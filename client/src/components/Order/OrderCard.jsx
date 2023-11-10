@@ -12,7 +12,7 @@ import EditIcon from "@mui/icons-material/Edit";
 import { useDispatch } from "react-redux";
 import {useAlert} from "react-alert";
 import { addItemToCart } from "../../actions/cartAction";
-import {useHistory} from "react-router-dom";
+import {useNavigate} from "react-router-dom";
 import DialogBox from "../Product/DialogBox";
 
 const useStyles = makeStyles((theme) => ({
@@ -266,7 +266,7 @@ const useStyles = makeStyles((theme) => ({
 
 const OrderCard = ({item , user}) => {
     const dispatch = useDispatch();
-    const history = useHistory();
+    const history = useNavigate();
     const alert = useAlert();
     const [open, setOpen] = useState(false);
    
@@ -277,7 +277,7 @@ const classes = useStyles();
   const addToCartHandler = (id , qty = 0) => {
     dispatch(addItemToCart(id , qty))
     alert.success("Item Added to Cart")
-    history.push("/cart")
+    history("/cart")
   }
 
    const handleClickOpen = () => {
@@ -388,7 +388,7 @@ const classes = useStyles();
                       variant="outlined"
                       className={classes.button}
                       onClick={() =>
-                        history.push(`/product/${product.productId}`)
+                        history(`/product/${product.productId}`)
                       }
                     >
                       View item

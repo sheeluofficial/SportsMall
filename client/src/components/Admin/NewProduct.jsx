@@ -5,7 +5,7 @@ import MetaData from "../layouts/MataData/MataData";
 import Loader from "../layouts/loader/Loader";
 import Sidebar from "./Siderbar";
 import { createProduct, clearErrors } from "../../actions/productAction";
-import { useHistory } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { NEW_PRODUCT_RESET } from "../../constants/productsConstatns";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Box from "@material-ui/core/Box";
@@ -33,7 +33,7 @@ import {
 
 function NewProduct() {
   const dispatch = useDispatch();
-  const history = useHistory();
+  const history = useNavigate();
   const alert = useAlert();
 
   const { loading, error, success } = useSelector(
@@ -87,7 +87,7 @@ function NewProduct() {
 
     if (success) {
       alert.success("Product Created Successfully");
-      history.push("/admin/dashboard");
+      history("/admin/dashboard");
       dispatch({ type: NEW_PRODUCT_RESET });
     }
   }, [dispatch, alert, error, history, success]);
