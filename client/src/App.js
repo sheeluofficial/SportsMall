@@ -144,24 +144,24 @@ function App() {
         <Route path="about_us" element={<AboutUsPage />} />
 
         {/* Private routes */}
-        <Route path="account" element={<PrivateRoute element={<ProfilePage />} />} />
-        <Route path="profile/update" element={<PrivateRoute element={<UpdateProfile />} />} />
-        <Route path="password/update" element={<PrivateRoute element={<UpdatePassword />} />} />
-        <Route path="shipping" element={<PrivateRoute element={<Shipping />} />} />
-        <Route path="order/confirm" element={<PrivateRoute element={<ConfirmOrder />} />} />
-        <Route path="success" element={<PrivateRoute element={<OrderSuccess />} />} />
-        <Route path="orders" element={<PrivateRoute element={<MyOrder />} />} />
+        <Route path="account" element={<PrivateRoute element={ProfilePage} />} />
+        <Route path="profile/update" element={<PrivateRoute element={UpdateProfile } />} />
+        <Route path="password/update" element={<PrivateRoute element={UpdatePassword } />} />
+        <Route path="shipping" element={<PrivateRoute element={Shipping } />} />
+        <Route path="order/confirm" element={<PrivateRoute element={ConfirmOrder } />} />
+        <Route path="success" element={<PrivateRoute element={OrderSuccess } />} />
+        <Route path="orders" element={<PrivateRoute element={MyOrder } />} />
 
         {/* Admin routes */}
-        <Route path="admin/dashboard" element={<PrivateRoute isAdmin element={<LazyDashboard />} />} />
-        <Route path="admin/products" element={<PrivateRoute isAdmin element={<LazyProductList />} />} />
-        <Route path="admin/product/:id" element={<PrivateRoute isAdmin element={<LazyUpdateProduct />} />} />
-        <Route path="admin/reviews" element={<PrivateRoute isAdmin element={<LazyProductReviews />} />} />
-        <Route path="admin/orders" element={<PrivateRoute isAdmin element={<LazyOrderList />} />} />
-        <Route path="admin/order/:id" element={<PrivateRoute isAdmin element={<LazyProcessOrder />} />} />
-        <Route path="admin/new/product" element={<PrivateRoute isAdmin element={<LazyNewProduct />} />} />
-        <Route path="admin/users" element={<PrivateRoute isAdmin element={<LazyUserList />} />} />
-        <Route path="admin/user/:id" element={<PrivateRoute isAdmin element={<LazyUpdateUser />} />} />
+        <Route path="admin/dashboard" element={<PrivateRoute isAdmin={true} element={LazyDashboard} />} />
+        <Route path="admin/products" element={<PrivateRoute isAdmin={true} element={LazyProductList } />} />
+        <Route path="admin/product/:id" element={<PrivateRoute isAdmin={true} element={LazyUpdateProduct } />} />
+        <Route path="admin/reviews" element={<PrivateRoute isAdmin={true} element={LazyProductReviews } />} />
+        <Route path="admin/orders" element={<PrivateRoute isAdmin={true} element={LazyOrderList } />} />
+        <Route path="admin/order/:id" element={<PrivateRoute isAdmin={true} element={LazyProcessOrder } />} />
+        <Route path="admin/new/product" element={<PrivateRoute isAdmin={true} element={LazyNewProduct } />} />
+        <Route path="admin/users" element={<PrivateRoute isAdmin={true} element={LazyUserList } />} />
+        <Route path="admin/user/:id" element={<PrivateRoute isAdmin={true} element={LazyUpdateUser } />} />
 
         {/* Elements for Stripe payment */}
         <Route path="process/payment" element={<Header />}>

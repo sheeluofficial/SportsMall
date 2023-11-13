@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { Navigate, Route } from "react-router-dom";
 import { load_UserProfile } from "../../actions/userAction";
 import CricketBallLoader from "../layouts/loader/Loader";
-function PrivateRoute({ isAdmin, component: Component,path, ...props }) {
+function PrivateRoute({ isAdmin, element: Component,path, ...props }) {
   const { loading, isAuthenticated, user } = useSelector(
     (state) => state.userData
   );
